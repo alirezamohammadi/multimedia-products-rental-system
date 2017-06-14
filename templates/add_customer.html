@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}ثبت نام مشتری{% end %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
+        <form action="" method="POST">
+            <fieldset>
+                <legend>مشخصات مشتری جدید</legend>
+                نام:<br /><input class="form-control" type="text" name="f_name" placeholder="نام" required />
+                <br /> نام خانوادگی:<br /><input class="form-control" type="text" name="l_name" placeholder="نام خانوادگی"
+                    required />
+                <br />شماره تلفن:<br /><input type="text" class="form-control" name="phone_number" placeholder="شماره تلفن"
+                    required />
+                <br />آدرس:<br /><input type="text" class="form-control" name="address" placeholder="آدرس" required />
+                <br />
+                <input class="form-control btn btn-success" type="submit" value="ثبت" />
+            </fieldset>
+        </form>
+    </div>
+</div>
+{% end %}
