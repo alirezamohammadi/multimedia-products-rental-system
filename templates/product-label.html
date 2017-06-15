@@ -1,0 +1,24 @@
+
+
+{% extends "base.html" %}
+
+{% block title %}مشخصات محصول{% end %}
+
+{% block content %}
+<div class="container text-center" id="section-to-print">
+    <h4>برچسب مشخصات محصول(اجاره محصولات چند رسانه ای)</h4>
+
+    <div>
+        <h4>عنوان: {{ title }}</h4>
+        <p>ژانر: {{ genre }}</p>
+        <p>نوع محصول: {{ type }}</p>
+        <p class="btn btn-primary">شناسه محصول: {{ id }}</p>
+    </div>
+    <div class="text-muted">
+        تمامی حقوق محفوظ است.
+    </div>
+</div>
+
+<button class="btn btn-success btn-block" onclick="window.print();">چاپ مشخصات محصول</button>
+<a href="/" class="btn btn-danger btn-block">بازگشت به صفحه اصلی</a>
+{% end %}

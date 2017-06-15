@@ -85,6 +85,32 @@ class AddProductTitle(BaseHandler):
     def get(self):
         self.render("add-product-title.html")
 
+    def post(self):
+        title=self.get_argument("title")
+        genre=self.get_argument("genre")
+        number=self.get_argument("number")
+        product_type=self.get_argument("type")
+
+        if number=="":
+            number="0"
+        
+        if product_type not in ["game","film"]:
+            self.write("تلاش برای نفوذ امنیتی")
+
+        query="INSERT INTO 'products'('title','genre','number','type') VALUES(?,?,?,?);"
+        cursor=self.application.db.cursor()
+        cursor.execute(query,[title,genre,number,product_type])
+
+        if product_type=="film":
+            product_type="فیلم"
+        else:
+            product_type="بازی"
+
+        self.application.db.commit()
+        self.render("product-label.html",title=title,genre=genre,type=product_type,id=cursor.lastrowid)
+
+        
+
 if __name__=="__main__":
     settings={
         "static_path": os.path.join(os.path.dirname(__file__), "static"),
