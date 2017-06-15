@@ -15,7 +15,7 @@ class BaseHandler(tornado.web.RequestHandler):
     def get_current_user(self):
         return self.get_secure_cookie("user")
 
-class MainHandler(tornado.web.RequestHandler):
+class MainHandler(BaseHandler):
     @tornado.web.authenticated
     def get(self):
         self.write(str(self.get_secure_cookie("user")))
@@ -35,15 +35,15 @@ class LoginHandler(BaseHandler):
         if not result:
             self.write("نام کاربری یا کلمه عبور اشتباه است")
         else:
-            self.set_secure_cookie("user","result[2]")
+            self.set_secure_cookie("user",result[2])
             self.write("ورود موفقیت آمیز")
 
 
-class LogoutHandler(tornado.web.RequestHandler):
+class LogoutHandler(BaseHandler):
     def get(self):
         self.clear_cookie("user")
 
-class RegisterHandler(tornado.web.RequestHandler):
+class RegisterHandler(BaseHandler):
     def get(self):
         self.render("register_customer.html")
 
