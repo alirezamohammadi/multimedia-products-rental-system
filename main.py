@@ -79,6 +79,11 @@ class Settings(BaseHandler):
         self.application.db.execute(query,[rentperiod,rentamount,penaltyperiod,penaltyamount])
         self.application.db.commit()
         self.redirect("/settings")
+    
+class AddProductTitle(BaseHandler):
+    @tornado.web.authenticated
+    def get(self):
+        self.render("add-product-title.html")
 
 if __name__=="__main__":
     settings={
@@ -93,7 +98,8 @@ if __name__=="__main__":
         (r"/register", RegisterCustomer),
         (r"/login", Login),
         (r"/logout", Logout),
-        (r"/settings", Settings)
+        (r"/settings", Settings),
+        (r"/add_product_title", AddProductTitle)
     ],**settings)
     app.db=sqlite3.connect("site.db")
     app.listen(8888)
