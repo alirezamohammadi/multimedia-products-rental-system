@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}تنظیمات سامانه{% end %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
+        <form method="POST">
+            <fieldset>
+                <legend>تنظیمات سیستم</legend>
+                حداکثر مدت زمان کرایه (روز):<br />
+                <input class="form-control" type="text" name="rentperiod" value="{{ settings[0] }}" required /><br /> هزینه اجاره برای مدت زمان مشخص
+                شده(تومان):<br />
+                <input class="form-control" type="text" name="rentamount" value="{{ settings[1] }}" required /><br /> طول دوره مشمول یک واحد جریمه
+                (روز):<br />
+                <input class="form-control" type="text" name="penaltyperiod" value="{{ settings[2] }}" required /><br /> جریمه هر دوره تاخیر(تومان):<br />
+                <input class="form-control" type="text" name="penaltyamount" value="{{ settings[3] }}" required /><br />
+                <input class="form-control btn btn-success" type="submit" value="به روز رسانی" />
+            </fieldset>
+        </form>
+    </div>
+</div>
+{% end %}

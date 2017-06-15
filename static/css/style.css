@@ -74,3 +74,27 @@ input[type="password"] {
   padding: 10px;
   border-radius: 20px;
 }
+
+.divider {
+  height: 1px;
+  width:100%;
+  display:block; /* for use on default inline elements like span */
+  margin: 25px 0px;
+  overflow: hidden;
+  background-color: #e5e5e5;
+}
+
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #section-to-print, #section-to-print * {
+    visibility: visible;
+  }
+  #section-to-print {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+}

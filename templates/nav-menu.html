@@ -11,21 +11,36 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
-                <li class="active"><a href="#"><span class="glyphicon glyphicon-home"></span>صفحه اصلی</a></li>
-                <li><a href="#about"><span class="glyphicon glyphicon-user"></span> کارکنان</a></li>
+                <li><a href="/"><span class="glyphicon glyphicon-home"></span>صفحه اصلی</a></li>
+
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-shopping-cart"></span>خدمات مشتری <b class="caret"></b></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span>امور مشتریان <b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li><a href="UI/Customer/add_customer.html">افزودن مشتری</a></li>
-                        <li><a href="#">Admin 2</a></li>
-                        <li class="divider"></li>
-                        <li class="dropdown-header">Portfolio</li>
-                        <li><a href="#">Portfolio 1</a></li>
-                        <li><a href="#">Portfolio 2</a></li>
+                        <li><a href="/register">ثبت مشتری</a></li>
                     </ul>
                 </li>
-                <li><a href="#"><span class="glyphicon glyphicon-cd"></span>محصولات</a></li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-shopping-cart"></span>اجاره و رزرو <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">اجاره محصول</a></li>
+                        <li><a href="#">ثبت بازگشت محصول</a></li>
+                        <li><a href="/settings">تنظیمات</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-cd"></span>محصولات <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">مشاهده وضعیت محصول</a></li>
+                        <li><a href="#">جستجوی عنوان</a></li>
+                        <li><a href="/add_product_title">افزودن عنوان جدید</a></li>
+                        <li><a href="#">افزودن دیسک برای یک عنوان</a></li>
+                    </ul>
+                </li>
+
                 <li><a href="#"><span class="glyphicon glyphicon-file"></span>درباره سامانه</a></li>
+                <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> خروج </a></li>
             </ul>
         </div>
     </div>

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}کارت عضویت مشتری{% end %}
+
+{% block content %}
+<div class="container text-center" id="section-to-print">
+    <h4>کارت عضویت(اجاره محصولات چند رسانه ای)</h4>
+
+    <div>
+        <h4>نام و نام خانوادگی: {{ fullname }}</h4>
+        <p>آدرس: {{ address }}</p>
+        <p>شماره تلفن: {{ phonenum }}</p>
+        <p class="btn btn-primary">شماره عضویت: {{ id }}</p>
+    </div>
+    <div class="text-muted">
+        تمامی حقوق محفوظ است.
+    </div>
+</div>
+
+<button class="btn btn-success btn-block" onclick="window.print();">چاپ کارت عضویت</button>
+<a href="/" class="btn btn-danger btn-block">بازگشت به صفحه اصلی</a>
+{% end %}
