@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}جستجوی محصول{% end %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
+        <form method="POST">
+            <fieldset>
+                <legend>جستجوی محصول</legend>
+                شماره شناسه عنوان محصول را وارد کنید:
+                <input type="text" class="form-control" placeholder="شناسه محصول" required /><br />
+                <input type="submit" class="form-control btn btn-success" value="جستجو" />
+            </fieldset>
+        </form>
+    </div>
+</div>
+{% end %}

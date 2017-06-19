@@ -91,6 +91,7 @@ class AddProductTitle(BaseHandler):
     def get(self):
         self.render("add-product-title.html")
 
+    @tornado.web.authenticated
     def post(self):
         title = self.get_argument("title")
         genre = self.get_argument("genre")
@@ -116,6 +117,10 @@ class AddProductTitle(BaseHandler):
         self.render("product-label.html", title=title, genre=genre,
                     type=product_type, id=cursor.lastrowid)
 
+class SearchTitle(BaseHandler):
+    @tornado.web.authenticated
+    def get(self):
+        self.render("search-title.html")
 
 if __name__ == "__main__":
     settings = {
@@ -131,7 +136,8 @@ if __name__ == "__main__":
         (r"/login", Login),
         (r"/logout", Logout),
         (r"/settings", Settings),
-        (r"/add_product_title", AddProductTitle)
+        (r"/add_product_title", AddProductTitle),
+        (r"/search_title", SearchTitle)
     ], **settings)
     app.db = sqlite3.connect("site.db")
     app.listen(8888)
