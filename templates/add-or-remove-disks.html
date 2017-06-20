@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}افزودن یا حذف دیسک های یک عنوان محصول{% end %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
+        <script src="static/js/scripts.js"></script>
+        <fieldset>
+            <legend>افزودن یا حذف دیسک های یک عنوان محصول</legend>
+            شماره شناسه عنوان محصول را وارد کنید:
+            <input type="text" class="form-control" placeholder="شناسه محصول" id="id" required /><br />
+            <button onclick="numberOfDisksAjaxRequest();" class="form-control btn btn-success">جستجو</button>
+        </fieldset>
+    </div>
+</div>
+<br />
+<br />
+<div class="row" id="demo">
+
+</div>
+{% end %}

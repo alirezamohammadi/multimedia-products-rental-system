@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}اطلاعات محصول{% end %}
+
+{% block content %}
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>شناسه</th>
+            <th>عنوان</th>
+            <th>ژانر</th>
+            <th>تعداد</th>
+            <th>نوع</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{ result[0] }}</td>
+            <td>{{ result[1] }}</td>
+            <td>{{ result[2] }}</td>
+            <td>{{ result[3] }}</td>
+            <td>{{ result[4] }}</td>
+        </tr>
+    </tbody>
+</table>
+{% end %}

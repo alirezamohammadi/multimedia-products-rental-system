@@ -4,6 +4,7 @@ import os
 import sqlite3
 import random
 import string
+import json
 
 
 def generateRandomString(length):
@@ -25,7 +26,7 @@ class MainHandler(BaseHandler):
 
 class Login(BaseHandler):
     def get(self):
-        self.render("login.html")
+        self.render("login.html", message=None)
 
     def post(self):
         username = self.get_argument("username")
@@ -34,7 +35,7 @@ class Login(BaseHandler):
         cur = self.application.db.execute(query, [username, password])
         result = cur.fetchone()
         if not result:
-            self.write("نام کاربری یا کلمه عبور اشتباه است")
+            self.render("login.html", message=True)
         else:
             self.set_secure_cookie("user", result[2])
             self.redirect("/")
@@ -117,17 +118,78 @@ class AddProductTitle(BaseHandler):
         self.render("product-label.html", title=title, genre=genre,
                     type=product_type, id=cursor.lastrowid)
 
+
 class SearchTitle(BaseHandler):
     @tornado.web.authenticated
     def get(self):
         self.render("search-title.html")
+
+
+class AddOrRemoveDisks(BaseHandler):
+    @tornado.web.authenticated
+    def get(self):
+        self.render("add-or-remove-disks.html")
+
+    def post(self):
+        disk_numbers = self.get_argument("disk_numbers")
+        query = "UPDATE 'products' SET number=? WHERE id=?;"
+        product_id = str(self.get_secure_cookie(
+            "product_id"), encoding='utf-8')
+        self.clear_cookie("product_id")
+        self.write(product_id)
+        self.application.db.execute(query, [disk_numbers, product_id])
+        self.application.db.commit()
+
+        self.redirect("/show_product_info/{}".format(product_id))
+
+
+class NumberOfDisks(BaseHandler):
+    # this class responds to ajax request
+    @tornado.web.authenticated
+    def post(self):
+        title_id = self.get_argument("title_id")
+        query = "SELECT * FROM 'products' WHERE id=?;"
+        cursor = self.application.db.execute(query, [title_id])
+        result = cursor.fetchone()
+        if result == None:
+            data = {
+                "message": "محصولی با شناسه مورد نظر یافت نشد."
+            }
+            json_data = json.dumps(data)
+            self.write(str(json_data))
+        else:
+            data = {
+                "id": result[0],
+                "title": result[1],
+                "genre": result[2],
+                "number": result[3],
+                "type": result[4],
+                "message": "None",
+            }
+            self.set_secure_cookie("product_id", str(result[0]))
+            json_data = json.dumps(data)
+            self.write(str(json_data))
+
+
+class ShowProductInfo(BaseHandler):
+    @tornado.web.authenticated
+    def get(self, product_id):
+        query = "SELECT * FROM 'products' WHERE id=?;"
+        cursor = self.application.db.execute(query, [product_id])
+        result = cursor.fetchone()
+        if result == None:
+            self.write("محصولی با شناسه مورد نظر یافت نشد")
+        else:
+            self.render("show-product-info.html", result=result)
+
 
 if __name__ == "__main__":
     settings = {
         "static_path": os.path.join(os.path.dirname(__file__), "static"),
         "template_path": os.path.join(os.path.dirname(__file__), "templates"),
         "login_url": "/login",
-        "cookie_secret": generateRandomString(50),
+        #"cookie_secret": generateRandomString(50),
+        "cookie_secret": "generateRandomString(50)",
     }
 
     app = tornado.web.Application([
@@ -137,7 +199,10 @@ if __name__ == "__main__":
         (r"/logout", Logout),
         (r"/settings", Settings),
         (r"/add_product_title", AddProductTitle),
-        (r"/search_title", SearchTitle)
+        (r"/search_title", SearchTitle),
+        (r"/add_or_remove_disks", AddOrRemoveDisks),
+        (r"/number_of_disks", NumberOfDisks),
+        (r"/show_product_info/([0-9]+)", ShowProductInfo)
     ], **settings)
     app.db = sqlite3.connect("site.db")
     app.listen(8888)
