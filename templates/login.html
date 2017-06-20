@@ -23,6 +23,10 @@
                 <input type="text" class="form-control" name="username" placeholder="نام کاربری" required="" autofocus="" />
                 <input type="password" class="form-control" name="password" placeholder="کلمه عبور" required="" />
                 <input type="submit" class="btn btn-lg btn-primary btn-block" value="ورود" />
+                {% if message !=None %}
+                <br />
+                <div class="alert alert-danger">نام کاربری یا کلمه عبور اشتباه است.</div>
+                {% end %}
             </form>
         </div>
     </div>
