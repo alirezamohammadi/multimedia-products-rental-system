@@ -51,7 +51,7 @@ class Logout(BaseHandler):
 class RegisterCustomer(BaseHandler):
     @tornado.web.authenticated
     def get(self):
-        self.render("register_customer.html")
+        self.render("register-customer.html")
 
     @tornado.web.authenticated
     def post(self):
@@ -182,6 +182,10 @@ class ShowProductInfo(BaseHandler):
         else:
             self.render("show-product-info.html", result=result)
 
+class RentProducts(BaseHandler):
+    @tornado.web.authenticated
+    def get(self):
+        self.render("rent-product.html")
 
 if __name__ == "__main__":
     settings = {
@@ -202,7 +206,8 @@ if __name__ == "__main__":
         (r"/search_title", SearchTitle),
         (r"/add_or_remove_disks", AddOrRemoveDisks),
         (r"/number_of_disks", NumberOfDisks),
-        (r"/show_product_info/([0-9]+)", ShowProductInfo)
+        (r"/show_product_info/([0-9]+)", ShowProductInfo),
+        (r"/rent_products", RentProducts)
     ], **settings)
     app.db = sqlite3.connect("site.db")
     app.listen(8888)
