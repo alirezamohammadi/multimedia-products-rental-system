@@ -182,10 +182,34 @@ class ShowProductInfo(BaseHandler):
         else:
             self.render("show-product-info.html", result=result)
 
+
 class RentProducts(BaseHandler):
     @tornado.web.authenticated
     def get(self):
         self.render("rent-product.html")
+
+    @tornado.web.authenticated
+    def post(self):
+        customer_id = self.get_argument("customer_id")
+        query = "SELECT * FROM customer WHERE id=?"
+        cursor = self.application.db.execute(query, [customer_id])
+        customer = cursor.fetchone()
+
+        if customer == None:
+            return self.write("مشتری با شناسه مورد نظر یافت نشد.")
+        
+        ids_string=self.get_argument("product_ids")
+        ids_list = ids_string.split(',')
+
+        products=[]
+
+        for id in ids_list:
+            query="SELECT * FROM products WHERE id=?"
+            cursor=self.application.db.execute(query,[id])
+            product=cursor.fetchone()
+            if product == None: return self.write("محصولی با شناسه %s یافت نشد"%(id))
+            products.append(product)
+        self.render("rent-information.html",products=products,customer=customer)
 
 if __name__ == "__main__":
     settings = {

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}جزییات اجاره محصول{% end %}
+
+{% block content %}
+<div class="alert alert-success">
+    ثبت اجاره با موفقیت انجام شد. <a href="/">بازگشت به صفحه اصلی</a>
+</div>
+<table class="table table-hover">
+    <caption>اطلاعات محصولات اجاره شده:</caption>
+    <thead>
+        <tr>
+            <th>شناسه</th>
+            <th>عنوان</th>
+            <th>ژانر</th>
+            <th>نوع</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for product in products %}
+        <tr>
+            <td>{{ product[0] }}</td>
+            <td>{{ product[1] }}</td>
+            <td>{{ product[2] }}</td>
+            <td>{{ product[4] }}</td>
+        </tr>
+        {% end %}
+    </tbody>
+</table>
+<table class="table table-hover">
+    <caption>اطلاعات مشتری:</caption>
+    <thead>
+        <tr>
+            <th>شناسه</th>
+            <th>نام</th>
+            <th>آدرس</th>
+            <th>شماره تلفن</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{ customer[0] }}</td>
+            <td>{{ customer[1] }}</td>
+            <td>{{ customer[2] }}</td>
+            <td>{{ customer[3] }}</td>
+        </tr>
+    </tbody>
+</table>
+<br />
+{% end %}
