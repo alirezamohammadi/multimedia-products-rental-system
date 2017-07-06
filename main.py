@@ -221,9 +221,45 @@ class RentProducts(BaseHandler):
 
 
 class ReturnProducts(BaseHandler):
+    @tornado.web.authenticated
     def get(self):
         self.render("return-products.html")
 
+    @tornado.web.authenticated
+    def post(self):
+        customer_id = self.get_argument("customer_id")
+        query = "SELECT * FROM customer WHERE id=?"
+        cursor = self.application.db.execute(query, [customer_id])
+        customer = cursor.fetchone()
+
+        if customer == None:
+            return self.write("مشتری با شناسه مورد نظر یافت نشد.")
+
+        ids_string = self.get_argument("product_ids")
+        ids_list = ids_string.split(',')
+        products = []
+        for id in ids_list:
+            query = "SELECT * FROM rent WHERE customer_id=? AND product_id=? AND return_date IS NULL;"
+            select_product_query="SELECT * FROM products WHERE id=?"
+            cursor = self.application.db.execute(query, [customer_id, id])
+            result = cursor.fetchone()
+            if result == None:
+                return self.write("محصولی با شناسه %s به مشتری مورد نظر اجاره داده نشده است" % (id))
+            select_product_query="SELECT * FROM products WHERE id=?"
+            cursor = self.application.db.execute(select_product_query, [id])
+            product = cursor.fetchone()
+            if product == None:
+                return self.write("محصولی با شناسه %s یافت نشد" % (id))
+            products.append(product)
+
+
+        for id in ids_list:
+            query = "UPDATE rent SET return_date=DATE('now') WHERE customer_id=? AND product_id=? AND return_date IS NULL;"
+            self.application.db.execute(query, [customer_id, id])
+            self.application.db.commit()
+
+        self.render("rent-information.html",
+                    products=products, customer=customer)
 
 if __name__ == "__main__":
     settings = {
