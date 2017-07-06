@@ -39,3 +39,12 @@ CREATE TABLE 'products'(
 );
 
 UPDATE sqlite_sequence SET seq = 10000 WHERE name = 'products';
+
+CREATE TABLE 'rent'(
+    'customer_id'   INTEGER     NOT NULL,
+    'product_id'    INTEGER     NOT NULL,
+    'rent_date'     DATE        NOT NULL,
+    'return_date'   DATE                ,
+    FOREIGN KEY     ('customer_id') REFERENCES  'customer'  ('id'),
+    FOREIGN KEY     ('product_id')  REFERENCES  'products'  ('id')
+);
