@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}ثبت بازگشت محصول{% end %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
+        <form method="POST">
+            <fieldset>
+                <legend>ثبت بازگشت محصول</legend>
+                شماره شناسه مشتری را وارد کنید:
+                <input type="text" name="customer_id" class="form-control" placeholder="شناسه مشتری" required /><br />
+                شناسه DVD هایی که مشتری باز گردانده است را با کاما (,) جدا کرده و وارد کنید:
+                <textarea name="product_ids" class="form-control"></textarea>
+                <input type="submit" class="form-control btn btn-success" value="اجاره" />
+            </fieldset>
+        </form>
+    </div>
+</div>
+{% end %}

@@ -215,9 +215,14 @@ class RentProducts(BaseHandler):
             query = "INSERT INTO rent(customer_id, product_id, rent_date) VALUES(?,?,DATE('now'));"
             self.application.db.execute(query, [customer_id, id])
             self.application.db.commit()
-            
+
         self.render("rent-information.html",
                     products=products, customer=customer)
+
+
+class ReturnProducts(BaseHandler):
+    def get(self):
+        self.render("return-products.html")
 
 
 if __name__ == "__main__":
@@ -240,7 +245,8 @@ if __name__ == "__main__":
         (r"/add_or_remove_disks", AddOrRemoveDisks),
         (r"/number_of_disks", NumberOfDisks),
         (r"/show_product_info/([0-9]+)", ShowProductInfo),
-        (r"/rent_products", RentProducts)
+        (r"/rent_products", RentProducts),
+        (r"/return_products", ReturnProducts),
     ], **settings)
     app.db = sqlite3.connect("site.db")
     app.listen(8888)
