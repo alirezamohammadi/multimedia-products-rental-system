@@ -1,12 +1,13 @@
 {% extends "base.html" %}
 
-{% block title %}اطلاعات محصول{% end %}
+{% block title %}اطلاعات محصول {{ product_info[0] }}{% end %}
 
 {% block content %}
+<h3>اطلاعات محصول {{ product_info[0] }}</h3>
 <table class="table table-hover">
     <thead>
         <tr>
-            <th>شناسه</th>
+            <th>شناسه محصول</th>
             <th>عنوان</th>
             <th>ژانر</th>
             <th>تعداد</th>
@@ -15,12 +16,34 @@
     </thead>
     <tbody>
         <tr>
-            <td>{{ result[0] }}</td>
-            <td>{{ result[1] }}</td>
-            <td>{{ result[2] }}</td>
-            <td>{{ result[3] }}</td>
-            <td>{{ result[4] }}</td>
+            <td>{{ product_info[0] }}</td>
+            <td>{{ product_info[1] }}</td>
+            <td>{{ product_info[2] }}</td>
+            <td>{{ product_info[3] }}</td>
+            <td>{{ product_info[4] }}</td>
         </tr>
+    </tbody>
+</table>
+<br />
+<h4>لیست مشتریانی که در حال حاضر محصول {{ product_info[0] }} را به امانت برده اند</h4>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>شناسه مشتری</th>
+            <th>نام</th>
+            <th>شماره تلفن</th>
+            <th>تاریخ امانت</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for rent in rent_info %}
+        <tr>
+            <td>{{ rent[0] }}</td>
+            <td>{{ rent[2] }}</td>
+            <td>{{ rent[3] }}</td>
+            <td>{{ rent[1] }}</td>
+        </tr>
+        {% end %}
     </tbody>
 </table>
 {% end %}

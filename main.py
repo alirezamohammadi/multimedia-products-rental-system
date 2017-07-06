@@ -124,6 +124,11 @@ class SearchTitle(BaseHandler):
     def get(self):
         self.render("search-title.html")
 
+    @tornado.web.authenticated
+    def post(self):
+        product_id = self.get_argument("product_id")
+        self.redirect("/show_product_info/" + product_id)
+
 
 class AddOrRemoveDisks(BaseHandler):
     @tornado.web.authenticated
@@ -175,12 +180,20 @@ class ShowProductInfo(BaseHandler):
     def get(self, product_id):
         query = "SELECT * FROM 'products' WHERE id=?;"
         cursor = self.application.db.execute(query, [product_id])
-        result = cursor.fetchone()
-        if result == None:
-            self.render("message.html", message="محصولی با شناسه مورد نظر یافت نشد.",
-                        return_path="/search_title")
-        else:
-            self.render("show-product-info.html", result=result)
+        product_info = cursor.fetchone()
+        if product_info == None:
+            return self.render("message.html", message="محصولی با شناسه مورد نظر یافت نشد.",
+                               return_path="/search_title")
+
+        query = """
+        SELECT DISTINCT customer_id, rent_date, name, phonenum
+        FROM rent JOIN customer ON rent.customer_id=customer.id 
+        WHERE product_id=? AND return_date IS NULL;
+        """
+        rent_info = self.application.db.execute(query, [product_id]).fetchall()
+
+        self.render("show-product-info.html",
+                    product_info=product_info, rent_info=rent_info)
 
 
 class RentProducts(BaseHandler):
@@ -197,7 +210,7 @@ class RentProducts(BaseHandler):
 
         if customer == None:
             return self.render("message.html", message="مشتری با شناسه مورد نظر یافت نشد.",
-                        return_path="/rent_products")
+                               return_path="/rent_products")
         ids_string = self.get_argument("product_ids")
         ids_list = ids_string.split(',')
 
@@ -209,7 +222,7 @@ class RentProducts(BaseHandler):
             product = cursor.fetchone()
             if product == None:
                 return self.render("message.html", message="محصولی با شناسه %s یافت نشد" % (id),
-                        return_path="/rent_products")
+                                   return_path="/rent_products")
             products.append(product)
 
         for id in ids_list:
@@ -235,7 +248,7 @@ class ReturnProducts(BaseHandler):
 
         if customer == None:
             return self.render("message.html", message="مشتری با شناسه مورد نظر یافت نشد.",
-                        return_path="/return_products")
+                               return_path="/return_products")
 
         ids_string = self.get_argument("product_ids")
         ids_list = ids_string.split(',')
@@ -247,7 +260,7 @@ class ReturnProducts(BaseHandler):
             result = cursor.fetchone()
             if result == None:
                 return self.render("message.html", message="محصولی با شناسه %s به مشتری مورد نظر اجاره داده نشده است" % (id),
-                        return_path="/rent_products")
+                                   return_path="/rent_products")
             select_product_query = "SELECT * FROM products WHERE id=?"
             cursor = self.application.db.execute(select_product_query, [id])
             product = cursor.fetchone()
@@ -261,6 +274,11 @@ class ReturnProducts(BaseHandler):
         self.render("rent-information.html",
                     products=products, customer=customer)
 
+
+class About(BaseHandler):
+    @tornado.web.authenticated
+    def get(self):
+        self.render("about.html")
 
 if __name__ == "__main__":
     settings = {
@@ -284,6 +302,7 @@ if __name__ == "__main__":
         (r"/show_product_info/([0-9]+)", ShowProductInfo),
         (r"/rent_products", RentProducts),
         (r"/return_products", ReturnProducts),
+        (r"/about", About),
     ], **settings)
     app.db = sqlite3.connect("site.db")
     app.listen(8888)
