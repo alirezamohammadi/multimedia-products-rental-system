@@ -197,19 +197,28 @@ class RentProducts(BaseHandler):
 
         if customer == None:
             return self.write("مشتری با شناسه مورد نظر یافت نشد.")
-        
-        ids_string=self.get_argument("product_ids")
+
+        ids_string = self.get_argument("product_ids")
         ids_list = ids_string.split(',')
 
-        products=[]
+        products = []
 
         for id in ids_list:
-            query="SELECT * FROM products WHERE id=?"
-            cursor=self.application.db.execute(query,[id])
-            product=cursor.fetchone()
-            if product == None: return self.write("محصولی با شناسه %s یافت نشد"%(id))
+            query = "SELECT * FROM products WHERE id=?"
+            cursor = self.application.db.execute(query, [id])
+            product = cursor.fetchone()
+            if product == None:
+                return self.write("محصولی با شناسه %s یافت نشد" % (id))
             products.append(product)
-        self.render("rent-information.html",products=products,customer=customer)
+
+        for id in ids_list:
+            query = "INSERT INTO rent(customer_id, product_id, rent_date) VALUES(?,?,DATE('now'));"
+            self.application.db.execute(query, [customer_id, id])
+            self.application.db.commit()
+            
+        self.render("rent-information.html",
+                    products=products, customer=customer)
+
 
 if __name__ == "__main__":
     settings = {
