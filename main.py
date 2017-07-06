@@ -136,7 +136,6 @@ class AddOrRemoveDisks(BaseHandler):
         product_id = str(self.get_secure_cookie(
             "product_id"), encoding='utf-8')
         self.clear_cookie("product_id")
-        self.write(product_id)
         self.application.db.execute(query, [disk_numbers, product_id])
         self.application.db.commit()
 
@@ -178,7 +177,8 @@ class ShowProductInfo(BaseHandler):
         cursor = self.application.db.execute(query, [product_id])
         result = cursor.fetchone()
         if result == None:
-            self.write("محصولی با شناسه مورد نظر یافت نشد")
+            self.render("message.html", message="محصولی با شناسه مورد نظر یافت نشد.",
+                        return_path="/search_title")
         else:
             self.render("show-product-info.html", result=result)
 
@@ -196,8 +196,8 @@ class RentProducts(BaseHandler):
         customer = cursor.fetchone()
 
         if customer == None:
-            return self.write("مشتری با شناسه مورد نظر یافت نشد.")
-
+            return self.render("message.html", message="مشتری با شناسه مورد نظر یافت نشد.",
+                        return_path="/rent_products")
         ids_string = self.get_argument("product_ids")
         ids_list = ids_string.split(',')
 
@@ -208,7 +208,8 @@ class RentProducts(BaseHandler):
             cursor = self.application.db.execute(query, [id])
             product = cursor.fetchone()
             if product == None:
-                return self.write("محصولی با شناسه %s یافت نشد" % (id))
+                return self.render("message.html", message="محصولی با شناسه %s یافت نشد" % (id),
+                        return_path="/rent_products")
             products.append(product)
 
         for id in ids_list:
@@ -233,25 +234,24 @@ class ReturnProducts(BaseHandler):
         customer = cursor.fetchone()
 
         if customer == None:
-            return self.write("مشتری با شناسه مورد نظر یافت نشد.")
+            return self.render("message.html", message="مشتری با شناسه مورد نظر یافت نشد.",
+                        return_path="/return_products")
 
         ids_string = self.get_argument("product_ids")
         ids_list = ids_string.split(',')
         products = []
         for id in ids_list:
             query = "SELECT * FROM rent WHERE customer_id=? AND product_id=? AND return_date IS NULL;"
-            select_product_query="SELECT * FROM products WHERE id=?"
+            select_product_query = "SELECT * FROM products WHERE id=?"
             cursor = self.application.db.execute(query, [customer_id, id])
             result = cursor.fetchone()
             if result == None:
-                return self.write("محصولی با شناسه %s به مشتری مورد نظر اجاره داده نشده است" % (id))
-            select_product_query="SELECT * FROM products WHERE id=?"
+                return self.render("message.html", message="محصولی با شناسه %s به مشتری مورد نظر اجاره داده نشده است" % (id),
+                        return_path="/rent_products")
+            select_product_query = "SELECT * FROM products WHERE id=?"
             cursor = self.application.db.execute(select_product_query, [id])
             product = cursor.fetchone()
-            if product == None:
-                return self.write("محصولی با شناسه %s یافت نشد" % (id))
             products.append(product)
-
 
         for id in ids_list:
             query = "UPDATE rent SET return_date=DATE('now') WHERE customer_id=? AND product_id=? AND return_date IS NULL;"
@@ -260,6 +260,7 @@ class ReturnProducts(BaseHandler):
 
         self.render("rent-information.html",
                     products=products, customer=customer)
+
 
 if __name__ == "__main__":
     settings = {
