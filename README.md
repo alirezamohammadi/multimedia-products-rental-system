@@ -38,7 +38,7 @@
 ## نصب و راه اندازی
 
  برای اجرای پروژه کافی است با دستور زیر بسته  ی Tornado را نصب کنید.
- <pre dir="ltr">pip install tornado</pre>
+ <pre dir="ltr">python3 -m pip install tornado</pre>
  سپس فایل main.py را با مفسر پایتون 3.5 یا بالاتر با دستور زیر اجرا کنید.
  <pre dir="ltr">python3 main.py</pre>
  و در نهایت مرورگر خود را باز کرده و در URL زیر با سامانه کار کنید.
